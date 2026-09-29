@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <title>KHOLIS — Creative Digital</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+    :root {
+      --bg: #050505;
+      --bg2: #0a0a0a;
+      --text: #f5f5f5;
+      --muted: #8b8b8b;
+      --line: rgba(255,255,255,.09);
+      --glass: rgba(255,255,255,.045);
+      --accent: #ffffff;
+      --radius: 24px;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, sans-serif;
+      overflow-x: hidden;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    button {
+      font: inherit;
+    }
+    /* =========================
+       LOADER
+    ========================= */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #050505;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: .8s ease;
+    }
+    .loader-inner {
+      text-align: center;
+    }
+    .loader-logo {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(40px, 9vw, 90px);
+      font-weight: 700;
+      letter-spacing: -.07em;
+    }
+    .loader-line {
+      width: 150px;
+      height: 2px;
+      background: rgba(255,255,255,.1);
+      margin: 20px auto 0;
+      overflow: hidden;
+    }
+    .loader-line span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: #fff;
+      animation: loading 1.7s ease forwards;
+    }
+    @keyframes loading {
+      to {
+        width: 100%;
+      }
+    }
+    /* =========================
+       BACKGROUND
+    ========================= */
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .035;
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+    }
+    .grid {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 70px 70px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+    }
+    .orb {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(120px);
+      opacity: .12;
+      z-index: -2;
+    }
+    .orb.one {
+      top: -250px;
+      left: -200px;
+      background: white;
+    }
+    .orb.two {
+      right: -250px;
+      top: 35%;
+      background: #777;
+    }
+    /* =========================
+       CURSOR
+    ========================= */
+    .cursor {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: white;
+      pointer-events: none;
+      z-index: 10000;
+      mix-blend-mode: difference;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition:
+        width .25s ease,
+        height .25s ease,
+        background .25s ease;
+    }
+    body.cursor-hover .cursor-ring {
+      width: 65px;
+      height: 65px;
+      background: rgba(255,255,255,.06);
+    }
+    /* =========================
+       NAVBAR
+    ========================= */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 22px 5vw;
+    }
+    nav {
+      max-width: 1300px;
+      margin: auto;
+      height: 64px;
+      padding: 0 18px 0 24px;
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      background: rgba(8,8,8,.68);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -.06em;
+    }
+    .logo span {
+      opacity: .35;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: #999;
+      font-size: 13px;
+      transition: .3s;
+    }
+    .nav-links a:hover {
+      color: white;
+    }
+    .nav-button {
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 100px;
+      padding: 11px 18px;
+      font-size: 12px;
+      transition: .3s;
+    }
+    .nav-button:hover {
+      background: white;
+      color: black;
+    }
+    .menu {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: transparent;
+      color: white;
+      cursor: pointer;
+    }
+    /* =========================
+       HERO
+    ========================= */
+    .hero {
+      min-height: 100vh;
+      padding: 170px 7vw 100px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .hero-content {
+      max-width: 1400px;
+      width: 100%;
+      margin: auto;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      border-radius: 100px;
+      padding: 9px 14px;
+      color: #aaa;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 15px white;
+      animation: blink 1.5s infinite;
+    }
+    @keyframes blink {
+      50% { opacity: .25; }
+    }
+    .hero-title {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(75px, 16vw, 250px);
+      line-height: .78;
+      letter-spacing: -.095em;
+      font-weight: 700;
+      user-select: none;
+    }
+    .hero-title .outline {
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,.65);
+    }
+    .hero-title .filled {
+      background: linear-gradient(
+        110deg,
+        #fff 10%,
+        #777 45%,
+        #fff 75%
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shine 5s linear infinite;
+    }
+    @keyframes shine {
+      to {
+        background-position: 200% center;
+      }
+    }
+    .hero-bottom {
+      margin-top: 70px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+    }
+    .hero-description {
+      max-width: 480px;
+      color: #999;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .hero-description strong {
+      color: white;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-width: 145px;
+      padding: 15px 21px;
+      border-radius: 100px;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      transition: .35s;
+    }
+    .btn.primary {
+      background: white;
+      color: black;
+    }
+    .btn.primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 40px rgba(255,255,255,.12);
+    }
+    .btn.secondary:hover {
+      background: rgba(255,255,255,.07);
+      transform: translateY(-4px);
+    }
+    .scroll-indicator {
+      position: absolute;
+      right: 6vw;
+      bottom: 35px;
+      color: #666;
+      font-size: 10px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .scroll-indicator::after {
+      content: "";
+      width: 1px;
+      height: 55px;
+      background: linear-gradient(white, transparent);
+    }
+    /* =========================
+       MARQUEE
+    ========================= */
+    .marquee {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+      padding: 25px 0;
+      white-space: nowrap;
+    }
+    .marquee-track {
+      display: inline-flex;
+      gap: 50px;
+      animation: marquee 25s linear infinite;
+    }
+    .marquee span {
+      font-family: "Space Grotesk";
+      font-size: clamp(28px, 4vw, 55px);
+      font-weight: 600;
+      letter-spacing: -.05em;
+    }
+    .marquee .dim {
+      color: #333;
+    }
+    @keyframes marquee {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+    /* =========================
+       SECTIONS
+    ========================= */
+    section.content {
+      max-width: 1300px;
+      margin: auto;
+      padding: 150px 7vw;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      margin-bottom: 70px;
+    }
+    .section-number {
+      color: #555;
+      font-size: 12px;
+    }
+    .section-title {
+      font-family: "Space Grotesk";
+      font-size: clamp(42px, 6vw, 82px);
+      letter-spacing: -.07em;
+      line-height: .95;
+      max-width: 800px;
+    }
+    .section-title span {
+      color: #555;
+    }
+    /* =========================
+       ABOUT
+    ========================= */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 80px;
+    }
+    .about-text {
+      font-family: "Space Grotesk";
+      font-size: clamp(24px, 3vw, 42px);
+      line-height: 1.25;
+      letter-spacing: -.04em;
+    }
+    .about-text span {
+      color: #555;
+    }
+    .facts {
+      display: grid;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+    .fact {
+      background: #080808;
+      padding: 25px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 13px;
+    }
+    .fact small {
+      color: #666;
+    }
+    /* =========================
+       WORKS
+    ========================= */
+    .works {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .work {
+      position: relative;
+      min-height: 430px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 70% 25%, rgba(255,255,255,.13), transparent 28%),
+        linear-gradient(145deg, #111, #070707);
+      transition: transform .4s ease, border-color .4s ease;
+      transform-style: preserve-3d;
+    }
+    .work:hover {
+      border-color: rgba(255,255,255,.25);
+    }
+    .work:nth-child(2) {
+      background:
+        radial-gradient(circle at 30% 70%, rgba(255,255,255,.1), transparent 30%),
+        linear-gradient(145deg, #0d0d0d, #060606);
+    }
+    .work:nth-child(3) {
+      background:
+        radial-gradient(circle at 75% 70%, rgba(255,255,255,.1), transparent 28%),
+        linear-gradient(145deg, #101010, #050505);
+    }
+    .work:nth-child(4) {
+      background:
+        radial-gradient(circle at 20% 25%, rgba(255,255,255,.08), transparent 28%),
+        linear-gradient(145deg, #0d0d0d, #050505);
+    }
+    .work-number {
+      color: #555;
+      font-size: 11px;
+    }
+    .work h3 {
+      position: absolute;
+      left: 30px;
+      bottom: 65px;
+      font-family: "Space Grotesk";
+      font-size: clamp(30px, 4vw, 55px);
+      letter-spacing: -.06em;
+    }
+    .work p {
+      position: absolute;
+      left: 30px;
+      bottom: 30px;
+      color: #666;
+      font-size: 11px;
+    }
+    .work-symbol {
+      position: absolute;
+      right: 35px;
+      top: 40px;
+      font-size: 90px;
+      font-weight: 800;
+      color: rgba(255,255,255,.04);
+      transform: rotate(-15deg);
+      transition: .5s;
+    }
+    .work:hover .work-symbol {
+      color: rgba(255,255,255,.13);
+      transform: rotate(0deg) scale(1.1);
+    }
+    /* =========================
+       SERVICES
+    ========================= */
+    .services {
+      border-top: 1px solid var(--line);
+    }
+    .service {
+      min-height: 120px;
+      padding: 25px 0;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      align-items: center;
+      gap: 30px;
+      transition: .35s;
+    }
+    .service:hover {
+      padding-left: 15px;
+      padding-right: 15px;
+      background: rgba(255,255,255,.025);
+    }
+    .service-number {
+      color: #555;
+      font-size: 12px;
+    }
+    .service h3 {
+      font-family: "Space Grotesk";
+      font-size: clamp(25px, 4vw, 45px);
+      letter-spacing: -.05em;
+      font-weight: 500;
+    }
+    .service-arrow {
+      font-size: 25px;
+      color: #555;
+    }
+    /* =========================
+       CONTACT
+    ========================= */
+    .contact-box {
+      position: relative;
+      min-height: 500px;
+      border: 1px solid var(--line);
+      border-radius: 35px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 45px;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(255,255,255,.1), transparent 30%),
+        #080808;
+    }
+    .contact-box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 45px 45px;
+      mask-image: linear-gradient(to bottom, black, transparent);
+      pointer-events: none;
+    }
+    .contact-label {
+      position: relative;
+      color: #666;
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .contact-title {
+      position: relative;
+      font-family: "Space Grotesk";
+      font-size: clamp(50px, 9vw, 125px);
+      line-height: .85;
+      letter-spacing: -.08em;
+    }
+    .contact-title span {
+      color: #444;
+    }
+    .contact-email {
+      position: relative;
+      display: inline-flex;
+      width: fit-content;
+      border-bottom: 1px solid #555;
+      padding-bottom: 8px;
+      font-size: 14px;
+      transition: .3s;
+    }
+    .contact-email:hover {
+      border-color: white;
+    }
+    /* =========================
+       FOOTER
+    ========================= */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 35px 7vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      color: #555;
+      font-size: 11px;
+    }
+    footer .footer-logo {
+      color: white;
+      font-family: "Space Grotesk";
+      font-size: 18px;
+      letter-spacing: -.05em;
+    }
+    .socials {
+      display: flex;
+      gap: 22px;
+    }
+    .socials a {
+      transition: .3s;
+    }
+    .socials a:hover {
+      color: white;
+    }
+    /* =========================
+       REVEAL
+    ========================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(35px);
+      transition:
+        opacity .9s ease,
+        transform .9s cubic-bezier(.16,1,.3,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* =========================
+       RESPONSIVE
+    ========================= */
+    @media (max-width: 800px) {
+      header {
+        padding: 15px;
+      }
+      nav {
+        height: 58px;
+      }
+      .nav-links {
+        position: fixed;
+        top: 82px;
+        left: 15px;
+        right: 15px;
+        padding: 25px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 5px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: rgba(8,8,8,.94);
+        backdrop-filter: blur(25px);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-15px);
+        transition: .3s;
+      }
+      .nav-links.active {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+      .nav-links li a {
+        display: block;
+        padding: 15px;
+      }
+      .nav-button {
+        display: none;
+      }
+      .menu {
+        display: block;
+      }
+      .hero {
+        padding: 150px 7vw 80px;
+      }
+      .hero-title {
+        font-size: clamp(70px, 22vw, 160px);
+      }
+      .hero-bottom {
+        margin-top: 50px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .scroll-indicator {
+        display: none;
+      }
+      section.content {
+        padding: 100px 7vw;
+      }
+      .section-head {
+        margin-bottom: 45px;
+      }
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 50px;
+      }
+      .works {
+        grid-template-columns: 1fr;
+      }
+      .work {
+        min-height: 360px;
+      }
+      .service {
+        grid-template-columns: 45px 1fr auto;
+      }
+      .contact-box {
+        min-height: 430px;
+        padding: 30px;
+        border-radius: 25px;
+      }
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .cursor,
+      .cursor-ring {
+        display: none;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">KHOLIS</div>
+      <div class="loader-line">
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- BACKGROUND -->
+  <div class="noise"></div>
+  <div class="grid"></div>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <!-- CURSOR -->
+  <div class="cursor"></div>
+  <div class="cursor-ring"></div>
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <a href="#home" class="logo">
+        KHOLIS<span>.</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#works">Works</a></li>
+        <li><a href="#services">Services</a></li>
+      </ul>
+      <a href="#contact" class="nav-button">
+        Let's Talk ↗
+      </a>
+      <button class="menu" aria-label="Menu">
+        ☰
+      </button>
+    </nav>
+  </header>
+  <!-- HERO -->
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <div class="eyebrow reveal">
+          <span class="status-dot"></span>
+          Available for creative projects
+        </div>
+        <h1 class="hero-title reveal">
+          <span class="outline">KHO</span><span class="filled">LIS</span>
+        </h1>
+        <div class="hero-bottom reveal">
+          <p class="hero-description">
+            <strong>Creative digital identity.</strong><br>
+            Menggabungkan desain, teknologi, dan
+            pengalaman digital untuk menciptakan sesuatu
+            yang terlihat berbeda.
+          </p>
+          <div class="hero-actions">
+            <a href="#works" class="btn primary">
+              Explore Works ↗
+            </a>
+            <a href="#contact" class="btn secondary">
+              Contact Me
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-indicator">
+        Scroll
+      </div>
+    </section>
+    <!-- MARQUEE -->
+    <div class="marquee">
+      <div class="marquee-track">
+        <span>DESIGN</span>
+        <span class="dim">✦</span>
+        <span>CREATIVE</span>
+        <span class="dim">✦</span>
+        <span>DIGITAL</span>
+        <span class="dim">✦</span>
+        <span>EXPERIENCE</span>
+        <span class="dim">✦</span>
+        <span>DESIGN</span>
+        <span class="dim">✦</span>
+        <span>CREATIVE</span>
+        <span class="dim">✦</span>
+        <span>DIGITAL</span>
+        <span class="dim">✦</span>
+        <span>EXPERIENCE</span>
+        <span class="dim">✦</span>
+      </div>
+    </div>
+    <!-- ABOUT -->
+    <section class="content reveal" id="about">
+      <div class="section-head">
+        <span class="section-number">01 / ABOUT</span>
+        <h2 class="section-title">
+          Digital things,
+          <span>made different.</span>
+        </h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          Saya percaya sebuah website bukan hanya
+          tentang tampilan.
+          <span>
+            Detail, motion, typography, dan interaction
+            harus bekerja bersama untuk menciptakan
+            pengalaman yang terasa hidup.
+          </span>
+        </div>
+        <div class="facts">
+          <div class="fact">
+            <small>Based in</small>
+            <span>Indonesia</span>
+          </div>
+          <div class="fact">
+            <small>Focus</small>
+            <span>Digital Design</span>
+          </div>
+          <div class="fact">
+            <small>Style</small>
+            <span>Minimal / Futuristic</span>
+          </div>
+          <div class="fact">
+            <small>Available</small>
+            <span>Worldwide</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- WORKS -->
+    <section class="content reveal" id="works">
+      <div class="section-head">
+        <span class="section-number">02 / WORKS</span>
+        <h2 class="section-title">
+          Selected
+          <span>directions.</span>
+        </h2>
+      </div>
+      <div class="works">
+        <article class="work tilt">
+          <span class="work-number">01</span>
+          <div class="work-symbol">01</div>
+          <h3>Digital<br>Identity</h3>
+          <p>Branding / Visual System</p>
+        </article>
+        <article class="work tilt">
+          <span class="work-number">02</span>
+          <div class="work-symbol">02</div>
+          <h3>Web<br>Experience</h3>
+          <p>UI / UX / Development</p>
+        </article>
+        <article class="work tilt">
+          <span class="work-number">03</span>
+          <div class="work-symbol">03</div>
+          <h3>Motion<br>Design</h3>
+          <p>Animation / Interaction</p>
+        </article>
+        <article class="work tilt">
+          <span class="work-number">04</span>
+          <div class="work-symbol">04</div>
+          <h3>Creative<br>Concept</h3>
+          <p>Art Direction / Concept</p>
+        </article>
+      </div>
+    </section>
+    <!-- SERVICES -->
+    <section class="content reveal" id="services">
+      <div class="section-head">
+        <span class="section-number">03 / SERVICES</span>
+        <h2 class="section-title">
+          Built for
+          <span>impact.</span>
+        </h2>
+      </div>
+      <div class="services">
+        <div class="service">
+          <span class="service-number">01</span>
+          <h3>Web Design</h3>
+          <span class="service-arrow">↗</span>
+        </div>
+        <div class="service">
+          <span class="service-number">02</span>
+          <h3>Creative Development</h3>
+          <span class="service-arrow">↗</span>
+        </div>
+        <div class="service">
+          <span class="service-number">03</span>
+          <h3>Visual Identity</h3>
+          <span class="service-arrow">↗</span>
+        </div>
+        <div class="service">
+          <span class="service-number">04</span>
+          <h3>Motion & Interaction</h3>
+          <span class="service-arrow">↗</span>
+        </div>
+      </div>
+    </section>
+    <!-- CONTACT -->
+    <section class="content reveal" id="contact">
+      <div class="contact-box">
+        <span class="contact-label">
+          Have a project?
+        </span>
+        <h2 class="contact-title">
+          Let's make<br>
+          <span>something.</span>
+        </h2>
+        <a
+          href="mailto:emailkamu@example.com"
+          class="contact-email"
+        >
+          emailkamu@example.com ↗
+        </a>
+      </div>
+    </section>
+  </main>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">
+      KHOLIS.
+    </div>
+    <div>
+      © <span id="year"></span> Kholis. All rights reserved.
+    </div>
+    <div class="socials">
+      <a href="#" aria-label="Instagram">IG</a>
+      <a href="#" aria-label="GitHub">GH</a>
+      <a href="#" aria-label="TikTok">TK</a>
+    </div>
+  </footer>
+  <script>
+    /* =========================
+       LOADER
+    ========================= */
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        const loader = document.getElementById("loader");
+        loader.style.opacity = "0";
+        loader.style.pointerEvents = "none";
+        setTimeout(() => {
+          loader.remove();
+        }, 800);
+      }, 1800);
+    });
+    /* =========================
+       YEAR
+    ========================= */
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+    /* =========================
+       MOBILE MENU
+    ========================= */
+    const menu = document.querySelector(".menu");
+    const navLinks = document.querySelector(".nav-links");
+    menu.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+    });
+    document.querySelectorAll(".nav-links a").forEach(link => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("active");
+      });
+    });
+    /* =========================
+       CURSOR
+    ========================= */
+    const cursor = document.querySelector(".cursor");
+    const ring = document.querySelector(".cursor-ring");
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+    window.addEventListener("mousemove", e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.left = mouseX + "px";
+      cursor.style.top = mouseY + "px";
+    });
+    function animateCursor() {
+      ringX += (mouseX - ringX) * .13;
+      ringY += (mouseY - ringY) * .13;
+      ring.style.left = ringX + "px";
+      ring.style.top = ringY + "px";
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+    document
+      .querySelectorAll("a, button, .work, .service")
+      .forEach(element => {
+        element.addEventListener("mouseenter", () => {
+          document.body.classList.add("cursor-hover");
+        });
+        element.addEventListener("mouseleave", () => {
+          document.body.classList.remove("cursor-hover");
+        });
+      });
+    /* =========================
+       SCROLL REVEAL
+    ========================= */
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: .12
+      }
+    );
+    document
+      .querySelectorAll(".reveal")
+      .forEach(el => observer.observe(el));
+    /* =========================
+       3D TILT
+    ========================= */
+    document
+      .querySelectorAll(".tilt")
+      .forEach(card => {
+        card.addEventListener("mousemove", e => {
+          if (window.innerWidth < 800) return;
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX =
+            ((y - centerY) / centerY) * -4;
+          const rotateY =
+            ((x - centerX) / centerX) * 4;
+          card.style.transform =
+            `perspective(900px)
+             rotateX(${rotateX}deg)
+             rotateY(${rotateY}deg)
+             translateY(-5px)`;
+        });
+        card.addEventListener("mouseleave", () => {
+          card.style.transform =
+            "perspective(900px) rotateX(0) rotateY(0) translateY(0)";
+        });
+      });
+    /* =========================
+       MAGNETIC BUTTON
+    ========================= */
+    document
+      .querySelectorAll(".btn, .nav-button")
+      .forEach(button => {
+        button.addEventListener("mousemove", e => {
+          if (window.innerWidth < 800) return;
+          const rect = button.getBoundingClientRect();
+          const x =
+            e.clientX - rect.left - rect.width / 2;
+          const y =
+            e.clientY - rect.top - rect.height / 2;
+          button.style.transform =
+            `translate(${x * .12}px, ${y * .12}px)`;
+        });
+        button.addEventListener("mouseleave", () => {
+          button.style.transform = "";
+        });
+      });
+    /* =========================
+       ESC CLOSE MENU
+    ========================= */
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
+        navLinks.classList.remove("active");
+      }
+    });
+  </script>
+</body>
+</html>
